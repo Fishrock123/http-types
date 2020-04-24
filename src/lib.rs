@@ -121,13 +121,13 @@ pub mod mime;
 
 mod body;
 mod error;
+mod extensions;
 mod macros;
 mod method;
 mod request;
 mod response;
 mod status;
 mod status_code;
-mod type_map;
 mod version;
 
 cfg_unstable! {
@@ -171,7 +171,7 @@ pub mod security;
 mod hyperium_http;
 
 #[doc(inline)]
-pub use crate::type_map::TypeMap;
+pub use crate::extensions::Extensions;
 
 // Not public API. Referenced by macro-generated code.
 #[doc(hidden)]

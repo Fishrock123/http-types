@@ -12,7 +12,7 @@ use crate::headers::{
 };
 use crate::mime::Mime;
 use crate::trailers::{self, Trailers};
-use crate::{Body, Method, TypeMap, Url, Version};
+use crate::{Body, Extensions, Method, Url, Version};
 
 pin_project_lite::pin_project! {
     /// An HTTP request.
@@ -35,7 +35,7 @@ pin_project_lite::pin_project! {
         receiver: Option<sync::Receiver<Trailers>>,
         #[pin]
         body: Body,
-        local: TypeMap,
+        ext: Extensions,
     }
 }
 
@@ -51,7 +51,7 @@ impl Request {
             body: Body::empty(),
             sender: Some(sender),
             receiver: Some(receiver),
-            local: TypeMap::new(),
+            ext: Extensions::new(),
         }
     }
 
@@ -402,12 +402,11 @@ impl Request {
     }
 
     /// Returns a reference to the existing local state.
-    pub fn local(&self) -> &TypeMap {
-        &self.local
+    pub fn ext(&self) -> &Extensions {
+        &self.ext
     }
 
     /// Returns a mutuable reference to the existing local state.
-    ///
     ///
     /// # Examples
     ///
@@ -417,13 +416,13 @@ impl Request {
     /// use http_types::{Url, Method, Request, Version};
     ///
     /// let mut req = Request::new(Method::Get, Url::parse("https://example.com")?);
-    /// req.local_mut().insert("hello from the extension");
-    /// assert_eq!(req.local().get(), Some(&"hello from the extension"));
+    /// req.ext_mut().insert("hello from the extension");
+    /// assert_eq!(req.ext().get(), Some(&"hello from the extension"));
     /// #
     /// # Ok(()) }
     /// ```
-    pub fn local_mut(&mut self) -> &mut TypeMap {
-        &mut self.local
+    pub fn ext_mut(&mut self) -> &mut Extensions {
+        &mut self.ext
     }
 }
 
@@ -438,7 +437,7 @@ impl Clone for Request {
             sender: self.sender.clone(),
             receiver: self.receiver.clone(),
             body: Body::empty(),
-            local: TypeMap::new(),
+            ext: Extensions::new(),
         }
     }
 }
