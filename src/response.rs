@@ -814,12 +814,6 @@ impl Index<&str> for Response {
     }
 }
 
-impl From<Error> for Response {
-    fn from(e: Error) -> Self {
-        Self::from_error(e)
-    }
-}
-
 impl From<StatusCode> for Response {
     fn from(s: StatusCode) -> Self {
         Response::new(s)
